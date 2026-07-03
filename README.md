@@ -1,121 +1,159 @@
-# Unlock'D Build-a-thon: Official Master Repository
+# WalletWise - Personal Finance & Expense Management Web Application
 
-Welcome to **Unlock'D**, the 24-hour progressive build-a-thon! This repository contains your initial starter code. This guide will walk you through the entire event flow, how to set up your environment, and how to submit your work for judging.
-
----
-
-## 🎯 The Challenge: A Personal Finance Application
-You will be building a comprehensive **personal finance and expense management application**. 
-
-- **Creative Freedom:** You have full control over the branding, the name of your product, and the UI/UX design. Get creative!
-- **Secret Features:** The specific core features you must implement are currently classified. You will receive your product roadmap progressively, with new features being revealed as you successfully pass each judging gate.
+WalletWise is a production-ready, full-stack personal finance and expense management platform built for hackathons. It helps users log incomes/expenses, set budgets, track long-term savings goals, transfer funds atomically, and visualize spending metrics via interactive dashboards.
 
 ---
 
-## 🏆 1. The Event Workflow
+## Technical Stack
 
-Unlock'D is a unique **24-hour progressive build-a-thon**. You will work in teams, receiving a secret product roadmap and starter code. 
-
-- **Progressive Gates:** You must complete timed development sprints.
-- **Deployment & Validation:** After each sprint, you must package your code and clear a "live judging gate" to unlock the next round.
-- **Exclusive Communication:** All updates, guidelines, and announcements will happen exclusively through our **Discord server**. Keep an eye on the announcements channel!
-
----
-
-## 💻 2. Tech Stack Freedom & The Backend
-
-- **Frontend:** Provided as a React + TypeScript + Vite application.
-- **Backend:** **You have COMPLETE FREEDOM to use any backend language or framework.** Whether you prefer Node.js, Python (FastAPI/Flask), Go, Java, or anything else—it is entirely up to you.
-- **Databases:** You can also add any database you prefer (PostgreSQL, MongoDB, MySQL, etc.) by defining it in the provided `docker-compose.yml`.
+- **Frontend**: React.js (Vite), React Router v6, Tailwind CSS, Recharts, React Hook Form, Axios, React Hot Toast, Lucide Icons.
+- **Backend**: Node.js, Express.js, JWT Authentication, bcryptjs, Mongoose.
+- **Database**: MongoDB.
+- **Orchestration**: Docker, Docker Compose.
 
 ---
 
-## 🐳 3. Mandatory Docker Requirement (Crucial)
+## Features
 
-**The Dockerfile Rule:** To ensure our judges can run your application locally without dealing with dependency hell, **your submission MUST be fully Dockerized.** 
-
-If the judge cannot build and run your containers, your submission will automatically fail the judgement, and you will not **unlock** the next task!
-
-### How the project is currently Dockerized:
-We have provided a boilerplate Docker setup for you:
-1. **Root `docker-compose.yml`**: Orchestrates both the frontend, backend, and any databases you choose to add.
-2. **`frontend/Dockerfile`**: Already configured to serve your Vite React app on port `5173`.
-3. **`backend/Dockerfile`**: A placeholder. **You must update this file** with the instructions for whatever backend language you choose to build with.
-
-### How to Run the Product:
-To spin up the entire application (both frontend and backend), open your terminal in the root directory and run:
-
-```bash
-docker-compose up -d --build
-```
-*This command will build the images and run your containers in detached mode. You can view your frontend in your browser at `http://localhost:5173`.*
+1. **Authentication**: JWT-based secure signup, login, persistent session (localStorage), and password recovery simulation.
+2. **Accounts & Wallets**: Manage separate accounts (Checking, Savings, Cash, Credit Card) with dynamic balances.
+3. **Atomic Transfers**: Execute secure, real-time money transfers between accounts with automatic balance increments/decrements and double-spend/overdraft checks.
+4. **Income Tracker**: Record salary, freelance, or dividend income.
+5. **Expense Tracker**: Monitor lifestyle expenses by categories (Food, Bills, Education, Shopping, Transport, etc.).
+6. **Budgets**: Set category-level limits per month with progress bars and automated over-budget warning badges.
+7. **Savings Goals**: Set long-term target savings milestones and fund goals directly from other accounts.
+8. **Reports & PDF Export**: Monthly breakdown statements, historical bar trends, CSV data exports, and print-optimized PDF outputs.
+9. **AI Spending Insights**: Algorithmic rules recommending budget advice based on your current month savings rate or food spend ratios.
+10. **Aesthetics & Theme**: Harmonies of HSL Tailwind styling, premium glassmorphism, glowing accents, and smooth Dark/Light mode transition.
 
 ---
 
-## 🚀 4. Integrations, Databases & Bonus Features
+## Directory Structure
 
-We encourage you to go above and beyond the baseline requirements! As long as you successfully complete the core sprint tasks, you have complete freedom to integrate extra features to "wow" the judges:
-
-- **Databases:** You can integrate ANY database (PostgreSQL, MySQL, MongoDB, Redis, etc.). 
-- **Advanced Tech:** Feel free to implement WebSockets for real-time updates, Redis for caching, or integrate AI/ML APIs (like OCR for receipt scanning or LLMs for spending insights).
-- **External APIs:** You can connect to third-party services, webhooks, or open APIs.
-
-**Crucial Docker Rule for Integrations:** If your integration requires a local service (like a database or Redis cache), **you must not run it separately**. Instead, add it as an additional service in the provided `docker-compose.yml` file. We have left commented-out examples in the `docker-compose.yml` file to show you exactly how to do this.
-
----
-
-## 🛠️ 5. Installation & Setup (Fork & Clone)
-
-To keep the main repository pristine and track your team's progress securely, we are using a **Fork-and-Pull Request workflow**.
-
-### Step 1: Fork the Repository
-Navigate to the main UnlockD Repository on GitHub and click the **"Fork"** button in the top right corner. This creates a personal copy of the project under your team's/personal GitHub account.
-
-### Step 2: Clone Your Fork
-Open your terminal and clone your newly created fork onto your local machine:
-```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/UnlockD-Master-Repo.git
-cd UnlockD-Master-Repo
-```
-
-### Step 3: Start the Docker Environment
-Ensure you have **Docker Desktop** installed and running on your machine. Then, execute:
-```bash
-docker-compose up -d --build
+```text
+walletwise/
+├── docker-compose.yml
+├── README.md
+├── backend/
+│   ├── src/
+│   │   ├── config/          # DB config, Auth keys
+│   │   ├── controllers/     # Route controllers (Auth, Incomes, Expenses, Budgets, Goals, Accounts, Transfers)
+│   │   ├── middleware/      # Auth, Error handling
+│   │   ├── models/          # Mongoose Schemas (User, Income, Expense, Budget, SavingsGoal, Account, Transfer)
+│   │   ├── routes/          # Express route declarations
+│   │   └── app.js           # Server initialization
+│   ├── Dockerfile
+│   └── package.json
+└── frontend/
+    ├── src/
+    │   ├── components/      # UI components (Sidebar, StatCard, ThemeToggle, ProtectedLayout)
+    │   ├── context/         # React Contexts (AuthContext, ThemeContext)
+    │   ├── pages/           # Pages (Dashboard, Accounts, Income, Expenses, Budgets, Goals, Reports, Login, Register, ForgotPassword)
+    │   ├── services/        # API Axios configurations
+    │   ├── App.jsx
+    │   ├── index.css
+    │   └── main.jsx
+    ├── Dockerfile
+    ├── nginx.conf           # Custom Nginx reverse proxy configuration
+    ├── tailwind.config.js
+    ├── vite.config.js
+    └── package.json
 ```
 
 ---
 
-## 📤 6. Submission & Judging Process
+## Environment Variables
 
-We are not just judging code; we are judging **functionality**.
+### Backend (`backend/.env` or docker-compose environments)
+- `PORT`: Server port (default `5000`)
+- `MONGO_URI`: MongoDB connection string (default `mongodb://mongodb:27017/walletwise`)
+- `JWT_SECRET`: Secret key for JWT encryption
 
-### The PR Submission Workflow:
-When you finish a sprint, you must submit a Pull Request (PR) to the main UnlockD repository.
+### Frontend (`frontend/.env` or docker-compose environments)
+- `VITE_API_URL`: Root endpoint of the API backend (default `/api` mapped via Nginx)
 
-1. **Create a Feature Branch:** Never work directly on `main`. Always branch off for a sprint.
-   ```bash
-   git checkout -b feature/your-sprint-name
-   ```
-2. **Commit your work:**
-   ```bash
-   git add .
-   git commit -m "feat: completed sprint 1"
-   ```
-3. **Push to your Fork:**
-   ```bash
-   git push origin feature/your-sprint-name
-   ```
-4. **Open a PR:** Go to the main project repository on GitHub and open a Pull Request comparing your feature branch against the main repo.
+---
 
-### The PR Template
-You **must** fill out the provided PR template when submitting (Team Name, Features Added, Known Bugs). Incomplete PRs will not be judged.
+## Getting Started & Installation
 
-### Local Judging Process
-- **No Cloud Deployment Required:** You are not required to host your app on AWS, Heroku, or Vercel. 
-- Our judges will pull your PR locally, run `docker-compose up --build`, and test your application directly on their machines.
-- **Standardized Ports:** Ensure your application is configured to expose its web server on the ports specified in your configuration. If you change ports, document it in your PR or README!
+### Option 1: Run with Docker (Recommended)
+Make sure you have Docker and Docker Compose installed. Execute the following command in the root folder:
 
-> **Brutally Honest Reminder:** If your submission does not follow these technical guidelines, it will fail the automated "gate check," and your team will not unlock the next task. If you experience technical setup issues, reach out to the organizers on Discord immediately!
+```bash
+docker compose up -d --build
+```
 
-Good luck, and Happy Building!
+This starts three services:
+1. **mongodb** (running on port `27017`)
+2. **backend** (running on port `5000`)
+3. **frontend** (served via Nginx on port `80`)
+
+Open your browser and navigate to: **`http://localhost`**
+
+To stop the services:
+```bash
+docker compose down
+```
+
+### Option 2: Local Development Setup
+If running locally, start MongoDB on your system, then:
+
+#### 1. Setup Backend
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+#### 2. Setup Frontend
+```bash
+cd ../frontend
+npm install
+npm run dev
+```
+Open **`http://localhost:3000`** in your browser.
+
+---
+
+## API Documentation
+
+All routes (except `/api/auth/register` and `/api/auth/login`) require a JWT header: `Authorization: Bearer <token>`.
+
+### Authentication
+- `POST /api/auth/register`: Create user account. Body: `{ name, email, password }`
+- `POST /api/auth/login`: Authenticate and receive token. Body: `{ email, password }`
+- `GET /api/auth/profile`: Fetch current user info.
+
+### Account Management
+- `GET /api/accounts`: Fetch all accounts. (Seeds Checking, Savings, and Cash automatically for new users).
+- `POST /api/accounts`: Create account. Body: `{ name, type, balance }`
+- `PUT /api/accounts/:id`: Update account name, type, or balance.
+- `DELETE /api/accounts/:id`: Delete account.
+
+### Transfer Operations
+- `GET /api/transfers`: Fetch transfer history.
+- `POST /api/transfers`: Execute transfer between two wallets (Atomic & Idempotent). Body: `{ fromAccountId, toAccountId, amount, description, idempotencyKey }`
+
+### Income Management
+- `GET /api/income`: Get income logs.
+- `POST /api/income`: Create income. Body: `{ title, amount, date, category, accountId }`
+- `PUT /api/income/:id`: Update income.
+- `DELETE /api/income/:id`: Delete income.
+
+### Expense Management
+- `GET /api/expense`: Get expense logs.
+- `POST /api/expense`: Create expense. Body: `{ title, amount, date, category, accountId }` (Checks for overdraft).
+- `PUT /api/expense/:id`: Update expense. (Checks for overdraft).
+- `DELETE /api/expense/:id`: Delete expense.
+
+### Budget Management
+- `GET /api/budget`: Fetch category budgets.
+- `POST /api/budget`: Set/Upsert budget. Body: `{ category, amount, month }`
+- `PUT /api/budget/:id`: Update budget amount.
+- `DELETE /api/budget/:id`: Delete budget.
+
+### Savings Goals
+- `GET /api/goals`: Get savings goals.
+- `POST /api/goals`: Create goal. Body: `{ title, targetAmount, currentAmount, deadline }`
+- `PUT /api/goals/:id`: Update savings goals.
+- `DELETE /api/goals/:id`: Delete goal.

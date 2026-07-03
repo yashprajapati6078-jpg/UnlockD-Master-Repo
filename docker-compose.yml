@@ -1,58 +1,43 @@
+version: '3.8'
+
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+  mongodb:
+    image: mongo:latest
+    container_name: walletwise_db
+    restart: always
     ports:
-      - "5173:5173"
+      - "27017:27017"
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    # Ensure frontend restarts if it crashes
-    restart: unless-stopped
-    # PARTICIPANT TODO: (Optional) If your frontend depends on the backend starting first, uncomment below:
-    # depends_on:
-    #   - backend
+      - mongodb_data:/data/db
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    # PARTICIPANT TODO: Update the port mapping below once your backend is ready
+    container_name: walletwise_api
+    restart: always
     ports:
-      - "3000:3000"
-    volumes:
-      - ./backend:/app
-    # Ensure backend restarts if it crashes
-    restart: unless-stopped
-    # PARTICIPANT TODO: (Optional) If you add a database service, uncomment the lines below so the backend configures it
-    # environment:
-    #   - DB_URL=jdbc:postgresql://db:5432/event_platform
-    #   - DB_USER=admin
-    #   - DB_PASS=adminpassword
-    # depends_on:
-    #   - db
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/walletwise
+      - JWT_SECRET=walletwisesupersecretjwtkeyforhackathon2026
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
 
-  # =======================================================================
-  # PARTICIPANT TODO: (Optional) Database Service Example
-  # =======================================================================
-  # If your project requires a database (SQL, NoSQL, etc.), you can add it here.
-  # Here is an example of adding a PostgreSQL service (you could also use MongoDB, MySQL, etc.):
-  # 
-  # db:
-  #   image: postgres:15-alpine
-  #   container_name: event_db
-  #   environment:
-  #     POSTGRES_USER: admin
-  #     POSTGRES_PASSWORD: adminpassword
-  #     POSTGRES_DB: event_platform
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - db_data:/var/lib/postgresql/data
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: walletwise_web
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_URL=/api
+    depends_on:
+      - backend
 
-# PARTICIPANT TODO: (Optional) If you added a database with a volume above, declare the volume here:
-# volumes:
-#   db_data:
+volumes:
+  mongodb_data:
